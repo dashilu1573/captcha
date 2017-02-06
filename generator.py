@@ -1,8 +1,12 @@
-# coding:utf-8
+#!/usr/bin/python
+#-*-coding: utf-8-*-
 import random
 import os
-from itertools import product
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 from PIL import Image, ImageDraw, ImageFont
+
 
 """
 基本：
@@ -42,12 +46,6 @@ def cha_draw(cha, text_color, font, rotate, size_cha):
 
     im = im.crop(im.getbbox())
     return im
-
-
-# 随机选择字符
-def choice_cha(chas):
-    x = random.randint(0, len(chas))
-    return chas[x - 1]
 
 
 # 画验证码
@@ -156,25 +154,32 @@ def captcha_generator(captcha_type):
             rd_text_pos = random.choice(rd_text_poss)
             rd_text_size = random.choice(rd_text_sizes)
             rd_text_color = random.choice(rd_text_colors)
-            set_cha = random.choice(captcha_type)
             noise = random.choice(noises)
             rotate = random.choice(rotates)
             nb_cha = random.choice(nb_chas)
             font_path = random.choice(font_paths)
             dir_name = 'all'
-            dir_path = 'img/' + dir_name + '/'
-            captcha_draw(size_im=size_im, nb_cha=nb_cha, set_cha=set_cha,
+            dir_path = 'gen_img/' + dir_name + '/'
+            captcha_draw(size_im=size_im, nb_cha=nb_cha, set_cha=captcha_type,
                          overlap=overlap, rd_text_pos=rd_text_pos, rd_text_size=rd_text_size,
                          rd_text_color=rd_text_color, rd_bg_color=rd_bg_color, noise=noise,
                          rotate=rotate, dir_path=dir_path, fonts=font_path)
 
 
 if __name__ == "__main__":
-    # 数字字母类型
-    character = ["0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789",
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"]
-    # 汉字类型
-    chinese = [u"的一是不人有了在你我个大中要这为上生时会以就子到来可能和自们年多发心好用家出关长他成天对也小后下学都点国过地行信方"
-         u"得最说二业分作如看女于面注别经动公开现而美么还事"]
+    # 数字类型
+    num = "0123456789"
 
-    captcha_generator(character)
+    # 字母类型
+    letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    #数字字母混合
+    num_letter = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    # 汉字类型
+    chinese = ""
+    f = open("./hanzi.txt", 'r')
+    for line in f.readlines():
+        chinese = unicode(line.strip())
+
+    captcha_generator(chinese)
