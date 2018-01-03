@@ -130,7 +130,7 @@ def captcha_draw(size_im, nb_cha, set_cha, fonts=None, overlap=0.0,
 
 
 # 生成验证码
-def captcha_generator(captcha_type, dir_path):
+def captcha_generator(captcha_type, dir_path, nb_chas, nb_image):
     """
     :param captcha_type: 字符类型
     :param dir_path: 保存路径
@@ -145,8 +145,6 @@ def captcha_generator(captcha_type, dir_path):
 
     noises = [[], ['point'], ['line'], ['line', 'point'], ['circle']]
     rotates = [True, False]  # 旋转
-    nb_chas = [4]  # 字符个数
-    nb_image = 100  # 图片数目
     font_dir = 'fonts/chinese'  # 字体路径 chinese english
     font_paths = []
     for dirpath, dirnames, filenames in os.walk(font_dir):
@@ -174,6 +172,12 @@ if __name__ == "__main__":
     # 保存图片路径
     dir_path = './img/train/'
 
+    # 单张图片字符个数
+    nb_chas = [4]
+
+    # 生成图片数量
+    nb_image = 1000
+
     # 数字类型
     num = "0123456789"
 
@@ -189,4 +193,4 @@ if __name__ == "__main__":
     for line in f.readlines():
         chinese = unicode(line.strip())
 
-    captcha_generator(chinese, dir_path)
+    captcha_generator(chinese, dir_path, nb_chas, nb_image)
