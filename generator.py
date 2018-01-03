@@ -1,12 +1,12 @@
 #!/usr/bin/python
-#-*-coding: utf-8-*-
+# -*-coding: utf-8-*-
 import random
 import os
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 from PIL import Image, ImageDraw, ImageFont
-
 
 """
 基本：
@@ -130,19 +130,24 @@ def captcha_draw(size_im, nb_cha, set_cha, fonts=None, overlap=0.0,
 
 
 # 生成验证码
-def captcha_generator(captcha_type):
-    size_im = (100, 50)     # 验证码图片尺寸
+def captcha_generator(captcha_type, dir_path):
+    """
+    :param captcha_type: 字符类型
+    :param dir_path: 保存路径
+    :return:
+    """
+    size_im = (100, 50)  # 验证码图片尺寸
     overlaps = [0.0, 0.3, 0.6]
     rd_text_poss = [True, False]
     rd_text_sizes = [True, False]
-    rd_text_colors = [True]     # false代表字体颜色全一致，但都是黑色
-    rd_bg_color = False     # 背景颜色
+    rd_text_colors = [True]  # false代表字体颜色全一致，但都是黑色
+    rd_bg_color = False  # 背景颜色
 
     noises = [[], ['point'], ['line'], ['line', 'point'], ['circle']]
-    rotates = [True, False]     # 旋转
-    nb_chas = [4]   # 字符个数
-    nb_image = 100    # 图片数目
-    font_dir = 'fonts/chinese'  # 字体路径
+    rotates = [True, False]  # 旋转
+    nb_chas = [4]  # 字符个数
+    nb_image = 100  # 图片数目
+    font_dir = 'fonts/chinese'  # 字体路径 chinese english
     font_paths = []
     for dirpath, dirnames, filenames in os.walk(font_dir):
         for filename in filenames:
@@ -158,22 +163,24 @@ def captcha_generator(captcha_type):
             rotate = random.choice(rotates)
             nb_cha = random.choice(nb_chas)
             font_path = random.choice(font_paths)
-            dir_name = 'all'
-            dir_path = 'gen_img/' + dir_name + '/'
             captcha_draw(size_im=size_im, nb_cha=nb_cha, set_cha=captcha_type,
                          overlap=overlap, rd_text_pos=rd_text_pos, rd_text_size=rd_text_size,
                          rd_text_color=rd_text_color, rd_bg_color=rd_bg_color, noise=noise,
-                         rotate=rotate, dir_path=dir_path, fonts=font_path)
+                         rotate=rotate, dir_path=dir_path, fonts=font_path, img_now=i)
 
 
 if __name__ == "__main__":
+
+    # 保存图片路径
+    dir_path = './img/train/'
+
     # 数字类型
     num = "0123456789"
 
     # 字母类型
     letter = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    #数字字母混合
+    # 数字字母混合
     num_letter = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     # 汉字类型
@@ -182,4 +189,4 @@ if __name__ == "__main__":
     for line in f.readlines():
         chinese = unicode(line.strip())
 
-    captcha_generator(chinese)
+    captcha_generator(chinese, dir_path)
